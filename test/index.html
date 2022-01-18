@@ -1,0 +1,94 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Test</title>
+    <meta name="author" content="ductran95">
+
+    <link rel="stylesheet" type="text/css" href="vendor/DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="vendor/DataTables/Buttons-2.2.1/css/buttons.dataTables.min.css" />
+
+    <script type="text/javascript" src="vendor/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="vendor/DataTables/DataTables-1.11.3/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="vendor/DataTables/Buttons-2.2.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="vendor/DataTables/JSZip-2.5.0/jszip.min.js"></script>
+    <script type="text/javascript" src="vendor/DataTables/Buttons-2.2.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="js/test-data.js"></script>
+    <script type="text/javascript" src="../src/buttons.html5.js"></script>
+</head>
+
+<body>
+
+    <table id="table1" class="display" width="100%"></table>
+
+    <div style="margin-top: 20px;"></div>
+
+    <table id="table2" class="display" width="100%"></table>
+
+    <script>
+        $(document).ready(function () {
+            var counter = 1;
+
+            var table1 = $('#table1').DataTable({
+                dom: 'Bfrtip',
+                data: dataSet,
+                columns: [
+                    { title: "Name" },
+                    { title: "Position" },
+                    { title: "Office" },
+                    { title: "Extn." },
+                    { title: "Start date" },
+                    { title: "Salary" }
+                ],
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        sheetName: 'Sheet 1',
+                        title: 'Table 1'
+                    },
+                    {
+                        text: 'Add new button',
+                        action: function (e, dt, node, config) {
+                            debugger
+                            dt.button().add(1, {
+                                text: 'Button ' + (counter++),
+                                action: function () {
+                                    this.remove();
+                                }
+                            });
+                        }
+                    }
+                ]
+            });
+
+            var table2 = $('#table2').DataTable({
+                data: dataSet,
+                columns: [
+                    { title: "Name" },
+                    { title: "Position" },
+                    { title: "Office" },
+                    { title: "Extn." },
+                ],
+                buttons: [
+                    'excelHtml5',
+                    {
+                        extend: 'excelHtml5',
+                        sheetName: 'Sheet 2',
+                        title: 'Table 2'
+                    }
+                ]
+            });
+
+            table1.button().add(1, {
+                extend: 'excelHtml5Multiple',
+                text: 'Export multiple',
+                filename: 'export-multiple',
+                tables: [table1, table2]
+            })
+        });
+    </script>
+</body>
+
+</html>
